@@ -156,6 +156,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 					return f.getPath();
 			}
 		}
+		logger.info(" ****************   valeur de 'files' : " + files + " **************** ");
 		return null;
 	}
 
