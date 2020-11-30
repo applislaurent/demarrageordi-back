@@ -40,6 +40,7 @@ public class CreationBatchController {
 	CreationBatchService creationBatchService;
 
 	@PostMapping(path = "creer.batch")
+	@CrossOrigin(origins = "*")
 	public Object creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto, HttpServletRequest request)
 			throws Exception {
 
@@ -70,6 +71,7 @@ public class CreationBatchController {
 	}
 
 	@GetMapping(path = "telecharger.batch")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<Resource> telechargerBatch() throws IOException {
 
 		final String NOM_FICHIER = "Demarrage_sites_et_logiciels.bat";
