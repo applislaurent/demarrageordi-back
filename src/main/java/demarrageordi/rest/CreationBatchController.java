@@ -32,7 +32,8 @@ import demarrageordi.service.CreationBatchService;
 
 @RestController
 @RequestMapping("/demarrageordi/")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@CrossOrigin
 @ResponseBody
 public class CreationBatchController {
 
