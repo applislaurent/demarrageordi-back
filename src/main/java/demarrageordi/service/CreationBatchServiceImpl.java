@@ -55,7 +55,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 		} catch (Exception e) {
 			logger.info("************* LOG INFO ************* :" + e.getMessage());
-			logger.error("************* LOG ERROR ************* :" + e.getMessage());
 			throw new Exception(creerMessageException(e), e);
 		}
 		return fichierBatch;
@@ -124,8 +123,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			String nomLogiciel = StringUtils.trimWhitespace(logiciel.getNom().toLowerCase()) + ".exe";
 			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
 			if (cheminLogiciel == null) {
-				logger.info("************* LOG INFO ************* :" + logiciel.getRepertoire());
-				logger.error("************* LOG ERROR ************* :" + logiciel.getRepertoire());
 				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
 			}
 			cheminsLogiciels.add(cheminLogiciel);
@@ -156,7 +153,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 					return f.getPath();
 			}
 		}
-		logger.info(" ****************   valeur de 'files' : " + files + " **************** ");
 		return null;
 	}
 
