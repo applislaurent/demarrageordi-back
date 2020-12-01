@@ -146,7 +146,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 //		File[] files = new File(repertoire).listFiles();
 
 		System.setProperty("file.separator", "\\");
-		File file = new File(repertoire);
+		File file = new File(repertoire.replaceAll("\\", "/"));
 		File[] files = file.listFiles();
 
 		try {
