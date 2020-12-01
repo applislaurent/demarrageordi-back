@@ -67,6 +67,17 @@ public class CreationBatchServiceTests {
 	}
 
 	@Test
+	public void test() {
+		System.out.println("***************************************");
+		System.out.println("OS Architecture : " + System.getProperty("os.arch"));
+		System.out.println("OS Name : " + System.getProperty("os.name"));
+		System.out.println("OS Version : " + System.getProperty("os.version"));
+		System.out.println("Data Model : " + System.getProperty("sun.arch.data.model"));
+		System.out.println("***************************************");
+
+	}
+
+	@Test
 	public void creationFichierBatchCasNominalOK() {
 
 		// Créer des logiciels et sitewebs

@@ -150,6 +150,12 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		logger.info("************ file : " + file);
 		logger.info("************ isFileDirectory ? : " + file.isDirectory());
 		logger.info("************ files : " + files);
+		System.out.println("***************************************");
+		System.out.println("OS Architecture : " + System.getProperty("os.arch"));
+		System.out.println("OS Name : " + System.getProperty("os.name"));
+		System.out.println("OS Version : " + System.getProperty("os.version"));
+		System.out.println("Data Model : " + System.getProperty("sun.arch.data.model"));
+		System.out.println("***************************************");
 
 		try {
 			File userDir = SystemUtils.getUserDir();
