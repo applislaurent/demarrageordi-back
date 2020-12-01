@@ -146,8 +146,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 //		File[] files = new File(repertoire).listFiles();
 		File file = new File(repertoire);
-		File[] files = file.listFiles();
-		file.getAbsolutePath();
+		File[] files = file.getAbsoluteFile().listFiles();
 		logger.info("************ file : " + file);
 		logger.info("************ isFileDirectory ? : " + file.isDirectory());
 		logger.info("************ files : " + files);
