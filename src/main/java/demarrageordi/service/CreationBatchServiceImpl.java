@@ -145,29 +145,28 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 //		File[] files = new File(repertoire).listFiles();
 
-		System.setProperty("file.separator", "\\");
-		File file = new File(repertoire.replaceAll("\\", "/"));
-		File[] files = file.listFiles();
-
 		try {
-			logger.info("************ file : " + file);
-			logger.info("************ isFileDirectory ? : " + file.getAbsoluteFile().isDirectory());
+
+			File file = new File(repertoire.replaceAll("\\", "/"));
+			logger.info("************ replaceAll: OK");
+			File[] files = file.listFiles();
 			logger.info("************ files : " + files);
+			if (files != null) {
+				for (File f : files) {
+					if (f.isDirectory() && f.getPath() != null) {
+						String loc = chercherChemin(f.getPath(), nomlogiciel);
+						if (loc != null)
+							return loc;
+					}
+					if (f.getName().equalsIgnoreCase(nomlogiciel))
+						return f.getPath();
+				}
+			}
+
 		} catch (Exception e) {
-			System.out.println();
+			logger.info("**********  ERREUR  : " + e.getMessage());
 		}
 
-		if (files != null) {
-			for (File f : files) {
-				if (f.isDirectory() && f.getPath() != null) {
-					String loc = chercherChemin(f.getPath(), nomlogiciel);
-					if (loc != null)
-						return loc;
-				}
-				if (f.getName().equalsIgnoreCase(nomlogiciel))
-					return f.getPath();
-			}
-		}
 		return null;
 	}
 
