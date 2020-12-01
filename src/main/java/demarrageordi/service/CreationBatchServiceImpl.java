@@ -154,7 +154,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			if (files != null) {
 				for (File f : files) {
 					if (f.isDirectory() && f.getPath() != null) {
-						String loc = chercherChemin(f.getPath(), nomlogiciel);
+						String loc = chercherChemin(f.getPath().replaceAll("\\", "/"), nomlogiciel);
 						if (loc != null)
 							return loc;
 					}
