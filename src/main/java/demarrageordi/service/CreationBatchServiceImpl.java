@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -141,7 +142,22 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		File[] files = new File(repertoire).listFiles();
+//		File[] files = new File(repertoire).listFiles();
+		File file = new File(repertoire);
+		File[] files = file.listFiles();
+
+		logger.info("************ file : " + file);
+
+		try {
+			File userDir = SystemUtils.getUserDir();
+			logger.info("************ User Directory: " + userDir.getCanonicalPath());
+
+			File userHome = SystemUtils.getUserHome();
+			System.out.println("\"************ User Home: " + userHome.getCanonicalPath());
+		} catch (Exception e) {
+			System.out.println();
+		}
+
 		if (files != null) {
 			for (File f : files) {
 				if (f.isDirectory() && f.getPath() != null) {
@@ -155,6 +171,33 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		}
 		return null;
 	}
+
+// backup method
+//	/**
+//	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
+//	 * répertoire et du nom de logiciel
+//	 * 
+//	 * @param repertoire
+//	 * @param nomlogiciel
+//	 * @return
+//	 */
+//	private String chercherChemin(String repertoire, String nomlogiciel) {
+//
+//		File[] files = new File(repertoire).listFiles();
+//
+//		if (files != null) {
+//			for (File f : files) {
+//				if (f.isDirectory() && f.getPath() != null) {
+//					String loc = chercherChemin(f.getPath(), nomlogiciel);
+//					if (loc != null)
+//						return loc;
+//				}
+//				if (f.getName().equalsIgnoreCase(nomlogiciel))
+//					return f.getPath();
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * 
