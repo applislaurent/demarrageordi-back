@@ -149,6 +149,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		File[] files = file.listFiles();
 
 		logger.info("************ file : " + file);
+		logger.info("************ files : " + files);
 
 		try {
 			File userDir = SystemUtils.getUserDir();
