@@ -122,7 +122,9 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		for (Logiciel logiciel : logiciels) {
 			// Suppression des espaces et mise en minuscule du nom du logiciel
 			String nomLogiciel = StringUtils.trimWhitespace(logiciel.getNom().toLowerCase()) + ".exe";
+			logger.info("************ nomLogiciel : " + nomLogiciel);
 			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
+			logger.info("************ cheminLogiciel : " + cheminLogiciel);
 			if (cheminLogiciel == null) {
 				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
 			}
