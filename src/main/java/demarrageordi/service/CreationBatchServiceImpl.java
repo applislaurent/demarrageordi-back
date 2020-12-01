@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -145,24 +144,14 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
 //		File[] files = new File(repertoire).listFiles();
+
 		File file = new File(repertoire);
 		File[] files = file.getAbsoluteFile().listFiles();
-		logger.info("************ file : " + file);
-		logger.info("************ isFileDirectory ? : " + file.isDirectory());
-		logger.info("************ files : " + files);
-		System.out.println("***************************************");
-		System.out.println("OS Architecture : " + System.getProperty("os.arch"));
-		System.out.println("OS Name : " + System.getProperty("os.name"));
-		System.out.println("OS Version : " + System.getProperty("os.version"));
-		System.out.println("Data Model : " + System.getProperty("sun.arch.data.model"));
-		System.out.println("***************************************");
 
 		try {
-			File userDir = SystemUtils.getUserDir();
-			logger.info("************ User Directory: " + userDir.getCanonicalPath());
-
-			File userHome = SystemUtils.getUserHome();
-			System.out.println("\"************ User Home: " + userHome.getCanonicalPath());
+			logger.info("************ file : " + file);
+			logger.info("************ isFileDirectory ? : " + file.getCanonicalFile().isDirectory());
+			logger.info("************ files : " + files);
 		} catch (Exception e) {
 			System.out.println();
 		}
