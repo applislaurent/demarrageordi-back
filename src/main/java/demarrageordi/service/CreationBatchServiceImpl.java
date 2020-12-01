@@ -146,11 +146,11 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 //		File[] files = new File(repertoire).listFiles();
 
 		File file = new File(repertoire);
-		File[] files = file.getAbsoluteFile().listFiles();
+		File[] files = file.listFiles();
 
 		try {
 			logger.info("************ file : " + file);
-			logger.info("************ isFileDirectory ? : " + file.getCanonicalFile().isDirectory());
+			logger.info("************ isFileDirectory ? : " + file.getAbsoluteFile().isDirectory());
 			logger.info("************ files : " + files);
 		} catch (Exception e) {
 			System.out.println();
