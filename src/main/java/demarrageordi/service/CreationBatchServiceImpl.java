@@ -133,6 +133,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 	}
 
+// méthode en cours de recherche
 	/**
 	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
 	 * répertoire et du nom de logiciel
@@ -143,13 +144,17 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-//		File[] files = new File(repertoire).listFiles();
+		File file = new File(System.getProperty("user.home"));
+		File[] files = file.listFiles();
+		for (File f : files) {
+			logger.info("*********** Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+		}
+
+		file = new File(repertoire);
+		logger.info("************ replaceAll: OK");
 
 		try {
-
-			File file = new File(repertoire.replaceAll("\\", "/"));
-			logger.info("************ replaceAll: OK");
-			File[] files = file.listFiles();
+			files = file.listFiles();
 			logger.info("************ files : " + files);
 			if (files != null) {
 				for (File f : files) {
