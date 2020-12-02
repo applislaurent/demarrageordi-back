@@ -146,12 +146,17 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 		File file = new File(System.getProperty("user.home"));
 		File[] files = file.listFiles();
+		logger.info("*********************  FICHIERS DE USER.HOME ************************");
 		for (File f : files) {
-			logger.info("*********** Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
 		}
 
-		file = new File(repertoire);
-		logger.info("************ replaceAll: OK");
+		file = new File(System.getProperty("user.dir"));
+		files = file.listFiles();
+		logger.info("*********************  FICHIERS DE USER.DIR ************************");
+		for (File f : files) {
+			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+		}
 
 		try {
 			files = file.listFiles();
