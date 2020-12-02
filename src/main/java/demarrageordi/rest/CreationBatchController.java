@@ -59,8 +59,9 @@ public class CreationBatchController {
 			Path path = Paths.get(batch.getAbsolutePath());
 			ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-			return ResponseEntity.ok().headers(header).contentLength(batch.length())
-					.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
+			return resource;
+//			return ResponseEntity.ok().headers(header).contentLength(batch.length())
+//					.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
 		} catch (Exception e) {
 			String messageErreur = e.getLocalizedMessage();
 			return ResponseEntity.status(200).headers(new HttpHeaders())
