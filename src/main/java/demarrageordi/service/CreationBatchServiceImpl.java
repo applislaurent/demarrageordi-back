@@ -144,37 +144,37 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		try {
-			File dossier = new File("D:\\Java");
-			logger.info("Le dossier existe t-il ?  => " + dossier.exists());
-			logger.info("Nom du dossier => " + dossier.getName());
-			logger.info("Path du dossier => " + dossier.getPath());
-			logger.info("AbsolutePath du dossier => " + dossier.getAbsolutePath());
-			logger.info("CanonicalPath du dossier => " + dossier.getCanonicalPath());
-		} catch (IOException e) {
-		}
+//		try {
+//			File dossier = new File("D:\\Java");
+//			logger.info("Le dossier existe t-il ?  => " + dossier.exists());
+//			logger.info("Nom du dossier => " + dossier.getName());
+//			logger.info("Path du dossier => " + dossier.getPath());
+//			logger.info("AbsolutePath du dossier => " + dossier.getAbsolutePath());
+//			logger.info("CanonicalPath du dossier => " + dossier.getCanonicalPath());
+//		} catch (IOException e) {
+//		}
 
-//		logger.info("*********************************************************************");
-//		logger.info("**********************     REPERTOIRE C      ************************");
-//		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-//		logger.info("*********************************************************************");
-//		File[] files = file.listFiles();
-//		logger.info("*********************  FICHIERS DE C ************************");
-//		for (File f : files) {
-//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-//		}
-//		logger.info("*********************************************************************");
-//
-//		file = new File(System.getProperty("user.dir"));
-//		logger.info("*************************     USER.DIR      ************************");
-//		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-//		logger.info("*********************************************************************");
-//		files = file.listFiles();
-//		logger.info("*********************  FICHIERS DE USER.DIR ************************");
-//		for (File f : files) {
-//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-//		}
-//		logger.info("*********************************************************************");
+		File file = new File(System.getProperty("user.dir"));
+		logger.info("******************   REPERTOIRE USER.DIR      **********************");
+		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+		logger.info("********************************************************************");
+		File[] files = file.listFiles();
+		logger.info("*********************  FICHIERS DE USER.DIR ************************");
+		for (File f : files) {
+			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+		}
+		logger.info("*********************************************************************");
+
+		file = new File(System.getProperty("user.home"));
+		logger.info("*********************  REPERTOIRE USER.HOME     *********************");
+		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+		logger.info("*********************************************************************");
+		files = file.listFiles();
+		logger.info("*********************  FICHIERS DE USER.HOME ************************");
+		for (File f : files) {
+			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+		}
+		logger.info("*********************************************************************");
 //
 //		try {
 //			files = file.listFiles();
