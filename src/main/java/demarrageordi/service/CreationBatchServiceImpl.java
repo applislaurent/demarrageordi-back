@@ -144,10 +144,15 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		File dossier = new File("D:\\Java");
-		logger.info("Le dossier existe t-il ?  => " + dossier.exists());
-		logger.info("Nom du dossier => " + dossier.getName());
-		logger.info("Chemin du dossier => " + dossier.getPath());
+		try {
+			File dossier = new File("D:\\Java");
+			logger.info("Le dossier existe t-il ?  => " + dossier.exists());
+			logger.info("Nom du dossier => " + dossier.getName());
+			logger.info("Path du dossier => " + dossier.getPath());
+			logger.info("AbsolutePath du dossier => " + dossier.getAbsolutePath());
+			logger.info("CanonicalPath du dossier => " + dossier.getCanonicalPath());
+		} catch (IOException e) {
+		}
 
 //		logger.info("*********************************************************************");
 //		logger.info("**********************     REPERTOIRE C      ************************");
