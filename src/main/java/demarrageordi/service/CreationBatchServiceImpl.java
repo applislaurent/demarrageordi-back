@@ -42,21 +42,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	public File createBatch(List<Logiciel> logiciels, List<Siteweb> sitesWeb, HttpServletRequest request)
 			throws Exception {
 
-		// ************ TEST ******************************************************
-		File file = new File(request.getServletContext().getContextPath());
-
-		logger.info("*********************************************************************");
-		logger.info("*************************     USER.HOME      ************************");
-		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-		logger.info("*********************************************************************");
-		File[] files = file.listFiles();
-		logger.info("*********************  FICHIERS DE USER.HOME ************************");
-		for (File f : files) {
-			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-		}
-		logger.info("*********************************************************************");
-		// ************ TEST ******************************************************
-
 		String idUnique = UUID.randomUUID().toString().substring(0, 15);
 
 		String nomFichierBatch = "Demarrage_sites_et_logiciels_" + idUnique + ".bat";
