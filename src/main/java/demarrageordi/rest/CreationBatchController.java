@@ -43,6 +43,13 @@ public class CreationBatchController {
 	public Object creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto, HttpServletRequest request)
 			throws Exception {
 
+		System.out.println("*********************************************************************");
+		System.out.println("*************************     request path      ************************");
+		System.out.println(request.getUserPrincipal());
+		System.out.println(request.getContextPath());
+		System.out.println(request.getUserPrincipal());
+		System.out.println("*********************************************************************");
+
 		List<Logiciel> logiciels = LogicielMapper.toLogiciels(logicielsEtSitesDto.getLogicielDtos());
 		List<Siteweb> sitesWeb = SitewebMapper.toSitewebs(logicielsEtSitesDto.getSitewebDtos());
 
