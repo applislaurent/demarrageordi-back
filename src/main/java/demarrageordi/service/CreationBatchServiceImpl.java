@@ -144,47 +144,51 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		File file = new File("D:\\Java");
-		logger.info("*********************************************************************");
-		logger.info("**********************     REPERTOIRE C      ************************");
-		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-		logger.info("*********************************************************************");
-		File[] files = file.listFiles();
-		logger.info("*********************  FICHIERS DE C ************************");
-		for (File f : files) {
-			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-		}
-		logger.info("*********************************************************************");
+		File dossier = new File("D:\\Java");
+		logger.info("Le dossier existe t-il ?  => " + dossier.exists());
+		logger.info("Nom du dossier => " + dossier.getName());
+		logger.info("Chemin du dossier => " + dossier.getPath());
 
-		file = new File(System.getProperty("user.dir"));
-		logger.info("*************************     USER.DIR      ************************");
-		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-		logger.info("*********************************************************************");
-		files = file.listFiles();
-		logger.info("*********************  FICHIERS DE USER.DIR ************************");
-		for (File f : files) {
-			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-		}
-		logger.info("*********************************************************************");
-
-		try {
-			files = file.listFiles();
-			logger.info("******** files : " + files);
-			if (files != null) {
-				for (File f : files) {
-					if (f.isDirectory() && f.getPath() != null) {
-						String loc = chercherChemin(f.getPath().replaceAll("\\", "/"), nomlogiciel);
-						if (loc != null)
-							return loc;
-					}
-					if (f.getName().equalsIgnoreCase(nomlogiciel))
-						return f.getPath();
-				}
-			}
-
-		} catch (Exception e) {
-			logger.info("**********  ERREUR  : " + e.getMessage());
-		}
+//		logger.info("*********************************************************************");
+//		logger.info("**********************     REPERTOIRE C      ************************");
+//		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+//		logger.info("*********************************************************************");
+//		File[] files = file.listFiles();
+//		logger.info("*********************  FICHIERS DE C ************************");
+//		for (File f : files) {
+//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+//		}
+//		logger.info("*********************************************************************");
+//
+//		file = new File(System.getProperty("user.dir"));
+//		logger.info("*************************     USER.DIR      ************************");
+//		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+//		logger.info("*********************************************************************");
+//		files = file.listFiles();
+//		logger.info("*********************  FICHIERS DE USER.DIR ************************");
+//		for (File f : files) {
+//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+//		}
+//		logger.info("*********************************************************************");
+//
+//		try {
+//			files = file.listFiles();
+//			logger.info("******** files : " + files);
+//			if (files != null) {
+//				for (File f : files) {
+//					if (f.isDirectory() && f.getPath() != null) {
+//						String loc = chercherChemin(f.getPath().replaceAll("\\", "/"), nomlogiciel);
+//						if (loc != null)
+//							return loc;
+//					}
+//					if (f.getName().equalsIgnoreCase(nomlogiciel))
+//						return f.getPath();
+//				}
+//			}
+//
+//		} catch (Exception e) {
+//			logger.info("**********  ERREUR  : " + e.getMessage());
+//		}
 
 		return null;
 	}
