@@ -42,6 +42,21 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	public File createBatch(List<Logiciel> logiciels, List<Siteweb> sitesWeb, HttpServletRequest request)
 			throws Exception {
 
+		// ************ TEST ******************************************************
+		File file = new File(request.getServletContext().getContextPath());
+
+		logger.info("*********************************************************************");
+		logger.info("*************************     USER.HOME      ************************");
+		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+		logger.info("*********************************************************************");
+		File[] files = file.listFiles();
+		logger.info("*********************  FICHIERS DE USER.HOME ************************");
+		for (File f : files) {
+			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
+		}
+		logger.info("*********************************************************************");
+		// ************ TEST ******************************************************
+
 		String idUnique = UUID.randomUUID().toString().substring(0, 15);
 
 		String nomFichierBatch = "Demarrage_sites_et_logiciels_" + idUnique + ".bat";
@@ -145,22 +160,31 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
 		File file = new File(System.getProperty("user.home"));
+		logger.info("*********************************************************************");
+		logger.info("*************************     USER.HOME      ************************");
+		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+		logger.info("*********************************************************************");
 		File[] files = file.listFiles();
 		logger.info("*********************  FICHIERS DE USER.HOME ************************");
 		for (File f : files) {
 			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
 		}
+		logger.info("*********************************************************************");
 
 		file = new File(System.getProperty("user.dir"));
+		logger.info("*************************     USER.DIR      ************************");
+		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
+		logger.info("*********************************************************************");
 		files = file.listFiles();
 		logger.info("*********************  FICHIERS DE USER.DIR ************************");
 		for (File f : files) {
 			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
 		}
+		logger.info("*********************************************************************");
 
 		try {
 			files = file.listFiles();
-			logger.info("************ files : " + files);
+			logger.info("******** files : " + files);
 			if (files != null) {
 				for (File f : files) {
 					if (f.isDirectory() && f.getPath() != null) {
