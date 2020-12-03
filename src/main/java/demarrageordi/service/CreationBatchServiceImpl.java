@@ -144,7 +144,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		File file = new File("c");
+		File file = new File("D:\\Java");
 		logger.info("*********************************************************************");
 		logger.info("**********************     REPERTOIRE C      ************************");
 		logger.info("Fichier: " + file.getName() + " - chemin :" + file.getAbsolutePath());
