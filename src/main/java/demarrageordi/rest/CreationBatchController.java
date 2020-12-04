@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,40 +16,55 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import demarrageordi.entity.Logiciel;
 import demarrageordi.entity.Siteweb;
+import demarrageordi.rest.dto.LogicielDto;
 import demarrageordi.rest.dto.LogicielMapper;
 import demarrageordi.rest.dto.LogicielsEtSitesDto;
+import demarrageordi.rest.dto.SitewebDto;
 import demarrageordi.rest.dto.SitewebMapper;
 import demarrageordi.service.CreationBatchService;
 
-@RestController
+@Controller
 @RequestMapping("/demarrageordi/")
 @CrossOrigin(origins = "*")
-@ResponseBody
 public class CreationBatchController {
 
 	@Autowired
 	CreationBatchService creationBatchService;
 
-	@PostMapping(path = "creer.batch")
-	public Object creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto, HttpServletRequest request)
-			throws Exception {
+	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
+	public String index(Model model) {
 
-		System.out.println("*********************************************************************");
-		System.out.println("*************************     request path      ************************");
-		System.out.println(request.getUserPrincipal());
-		System.out.println(request.getContextPath());
-		System.out.println(request.getUserPrincipal());
-		System.out.println("*********************************************************************");
+		String message = "Hello Spring Boot + JSP";
+
+		model.addAttribute("message", message);
+
+		return "index.jsp";
+	}
+
+	@PostMapping(path = "creer.batch")
+	public Object creationBatch(@RequestParam("nomLogiciel1") String nomLogiciel1,
+			@RequestParam("repertoireLogiciel1") String repertoireLogiciel1,
+			@RequestParam("urlSiteweb1") String urlSiteweb1, LogicielsEtSitesDto logicielsEtSitesDto,
+			HttpServletRequest request) throws Exception {
+
+		List<LogicielDto> logicielDtos = new ArrayList<>();
+		logicielDtos.add(new LogicielDto(nomLogiciel1, repertoireLogiciel1));
+		logicielsEtSitesDto.setLogicielDtos(logicielDtos);
+
+		List<SitewebDto> siteWebDtos = new ArrayList<>();
+		siteWebDtos.add(new SitewebDto(urlSiteweb1));
+		logicielsEtSitesDto.setSitewebDtos(siteWebDtos);
 
 		List<Logiciel> logiciels = LogicielMapper.toLogiciels(logicielsEtSitesDto.getLogicielDtos());
 		List<Siteweb> sitesWeb = SitewebMapper.toSitewebs(logicielsEtSitesDto.getSitewebDtos());
