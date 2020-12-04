@@ -55,9 +55,9 @@ public class CreationBatchController {
 	@PostMapping(path = "creer.batch")
 	public Object creationBatch(@RequestParam("nomLogiciel1") String nomLogiciel1,
 			@RequestParam("repertoireLogiciel1") String repertoireLogiciel1,
-			@RequestParam("urlSiteweb1") String urlSiteweb1, LogicielsEtSitesDto logicielsEtSitesDto,
-			HttpServletRequest request) throws Exception {
+			@RequestParam("urlSiteweb1") String urlSiteweb1, HttpServletRequest request) throws Exception {
 
+		LogicielsEtSitesDto logicielsEtSitesDto = new LogicielsEtSitesDto();
 		List<LogicielDto> logicielDtos = new ArrayList<>();
 		logicielDtos.add(new LogicielDto(nomLogiciel1, repertoireLogiciel1));
 		logicielsEtSitesDto.setLogicielDtos(logicielDtos);
