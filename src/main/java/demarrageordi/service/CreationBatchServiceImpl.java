@@ -122,7 +122,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			// Suppression des espaces et mise en minuscule du nom du logiciel
 			String nomLogiciel = StringUtils.trimWhitespace(logiciel.getNom().toLowerCase()) + ".exe";
 			logger.info("************ nomLogiciel : " + nomLogiciel);
-			String cheminLogiciel = chercherChemin(null, logiciel.getRepertoire(), nomLogiciel);
+			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
 			logger.info("************ cheminLogiciel : " + cheminLogiciel);
 			if (cheminLogiciel == null) {
 				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
@@ -189,40 +189,14 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 * @param nomlogiciel
 	 * @return
 	 */
-	private String chercherChemin(String userDir, String repertoire, String nomlogiciel) {
+	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		if (userDir == null || userDir.equals("")) {
-			System.setProperty("user.home", "C:\\");
-		}
-
-		File file = new File(System.getProperty("user.dir"));
-		logger.info("******************   REPERTOIRE USER.DIR      **********************");
-		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-		logger.info("********************************************************************");
-		File[] files = file.listFiles();
-		logger.info("*********************  FICHIERS DE USER.DIR ************************");
-		for (File f : files) {
-			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-		}
-		logger.info("*********************************************************************");
-
-		file = new File(System.getProperty("user.home"));
-		logger.info("*********************  REPERTOIRE USER.HOME     *********************");
-		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-		logger.info("*********************************************************************");
-		files = file.listFiles();
-		logger.info("*********************  FICHIERS DE USER.HOME ************************");
-		for (File f : files) {
-			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-		}
-		logger.info("*********************************************************************");
-
-		files = new File(repertoire).listFiles();
+		File[] files = new File(repertoire).listFiles();
 
 		if (files != null) {
 			for (File f : files) {
 				if (f.isDirectory() && f.getPath() != null) {
-					String loc = chercherChemin(userDir, f.getPath(), nomlogiciel);
+					String loc = chercherChemin(f.getPath(), nomlogiciel);
 					if (loc != null)
 						return loc;
 				}
