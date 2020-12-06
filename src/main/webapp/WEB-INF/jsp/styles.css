@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background:#FFF7AF;
+  padding-left: 1em;
+  padding-top: 1em;
+}
+
+
+h1{
+  font-size: 1.75em;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #2A2215;
+  background: none;
+}
+
+h2{
+  font-size: 1.25em;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #2A2215;
+  background: none;
+}
+.input100 {
+  min-width: 100px;
+}
+
+.input200 {
+  min-width: 200px;
+}
+
+.input300 {
+  min-width: 300px;
+}
+
+.messageErreur {
+  padding-left: 0.5em;
+  font-size: 0.75em;
+  font-style: italic;
+  color: red;
+}
+.messageConfirmationCreationOK {
+  padding-left: 0.5em;
+  font-size: 0.75em;
+  font-style: italic;
+  color: green;
+}
+
+.aligne div{
+  display: inline-block;
+}
+
+.paddingLeft1Em {
+  padding-left: 1em;
+}
+
+.container{padding:15px 10px;margin:15px 15px 15px 10px;}
+.addNew{margin:0px 0px 0px 15px;}
+
+
+
+
