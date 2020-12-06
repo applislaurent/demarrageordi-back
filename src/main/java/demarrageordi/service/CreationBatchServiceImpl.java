@@ -191,9 +191,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		if (!repertoire.startsWith("cd /mnt/c")) {
-			repertoire = "cd /mnt/c" + repertoire;
-		}
+		repertoire.replaceAll("C:\\", "cd /mnt/c");
 		File[] files = new File(repertoire).listFiles();
 
 		if (files != null) {
