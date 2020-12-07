@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -180,6 +181,9 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 ////		}
 //		return null;
 //	}
+
+	@Value("${user.home}")
+	String userHomePath;
 
 	/**
 	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
