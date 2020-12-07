@@ -183,7 +183,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 //	}
 
 	@Value("${user.home}")
-	String userHomePath;
+	String userHomePath = "C:\\";
 
 	/**
 	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
@@ -195,7 +195,12 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		File[] files = new File(repertoire).listFiles();
+		logger.info("************** USER.HOME : " + System.getProperty("user.home"));
+
+		File file = new File(repertoire);
+		logger.info("************** FILE PATH : " + file.getAbsolutePath());
+
+		File[] files = file.listFiles();
 
 		if (files != null) {
 			for (File f : files) {
