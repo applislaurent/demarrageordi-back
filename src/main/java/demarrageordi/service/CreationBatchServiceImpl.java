@@ -195,6 +195,8 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
+		System.setProperty("user.home", "C:\\");
+
 		logger.info("************** USER.HOME : " + System.getProperty("user.home"));
 
 		File file = new File(repertoire);
