@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -199,7 +200,10 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 		logger.info("************** USER.HOME : " + System.getProperty("user.home"));
 
-		File file = new File(repertoire);
+//	    Path newFilePath = Paths.get(repertoire);
+//	    Files.createFile(newFilePath);
+
+		File file = Paths.get(repertoire).toFile();
 		logger.info("************** FILE PATH : " + file.getAbsolutePath());
 
 		File[] files = file.listFiles();
