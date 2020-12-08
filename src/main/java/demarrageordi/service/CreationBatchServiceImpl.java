@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -149,41 +150,20 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomLogiciel) {
 
-		// récupérer le disque (C ou D) du chemin
-		// faire une recherche sur
-
-		String disc = "";
 		try {
-			disc = nomLogiciel.substring(0, 1);
-			nomLogiciel = nomLogiciel.substring(3);
+			String commande = "cmd /C if not exist \"" + nomLogiciel + "\" (exit 7) else (exit 0)";
 
-			Process process = Runtime.getRuntime().exec("cmd /" + disc + " if not exist " + nomLogiciel + " exit 7");
+			Process process = Runtime.getRuntime().exec(commande);
+			process.waitFor(2, TimeUnit.SECONDS);
 			int sortie = process.exitValue();
+			process.destroy();
 			if (sortie == 7) {
-				return null;
+				nomLogiciel = null;
 			}
 		} catch (Exception ex) {
-			logger.info("hohohohohohohohohohohohohohohohohooho");
+			return null;
 		}
-		return (disc + ":\\" + nomLogiciel);
-
-//		File file = new File(repertoire);
-//		logger.info("************** FILE PATH : " + file.getAbsolutePath());
-//
-//		File[] files = file.listFiles();
-//
-//		if (files != null) {
-//			for (File f : files) {
-//				if (f.isDirectory() && f.getPath() != null) {
-//					String loc = chercherChemin(f.getPath(), nomlogiciel);
-//					if (loc != null)
-//						return loc;
-//				}
-//				if (f.getName().equalsIgnoreCase(nomlogiciel))
-//					return f.getPath();
-//			}
-//		}
-//		return null;
+		return (nomLogiciel);
 	}
 
 	/**
