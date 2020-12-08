@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -121,8 +119,14 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		List<String> cheminsLogiciels = new ArrayList<>();
 
 		for (Logiciel logiciel : logiciels) {
-			// Suppression des espaces et mise en minuscule du nom du logiciel
-			String nomLogiciel = StringUtils.trimWhitespace(logiciel.getNom().toLowerCase()) + ".exe";
+			// Suppression des espaces et mise en minuscule du nom du logiciel + ajout
+			// éventuel de l'extension
+			// String nomLogiciel =
+			// StringUtils.trimWhitespace(logiciel.getNom().toLowerCase());
+			String nomLogiciel = logiciel.getNom();
+			if (!nomLogiciel.endsWith(".exe")) {
+				nomLogiciel = nomLogiciel + ".exe";
+			}
 			logger.info("************ nomLogiciel : " + nomLogiciel);
 			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
 			logger.info("************ cheminLogiciel : " + cheminLogiciel);
@@ -135,57 +139,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 	}
 
-//	/**
-//	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
-//	 * répertoire et du nom de logiciel
-//	 * 
-//	 * @param repertoire
-//	 * @param nomlogiciel
-//	 * @return
-//	 */
-//	private String chercherChemin(String repertoire, String nomlogiciel) {
-//
-//		File file = new File(System.getProperty("user.dir"));
-//		logger.info("******************   REPERTOIRE USER.DIR      **********************");
-//		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-//		logger.info("********************************************************************");
-//		File[] files = file.listFiles();
-//		logger.info("*********************  FICHIERS DE USER.DIR ************************");
-//		for (File f : files) {
-//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-//		}
-//		logger.info("*********************************************************************");
-//
-//		file = new File(System.getProperty("user.home"));
-//		logger.info("*********************  REPERTOIRE USER.HOME     *********************");
-//		logger.info("Répertoire: " + file.getName() + " - chemin :" + file.getAbsolutePath());
-//		logger.info("*********************************************************************");
-//		files = file.listFiles();
-//		logger.info("*********************  FICHIERS DE USER.HOME ************************");
-//		for (File f : files) {
-//			logger.info("Fichier: " + f.getName() + " - chemin :" + f.getAbsolutePath());
-//		}
-//		logger.info("*********************************************************************");
-//
-////		File[] files = new File(repertoire).listFiles();
-////
-////		if (files != null) {
-////			for (File f : files) {
-////				if (f.isDirectory() && f.getPath() != null) {
-////					String loc = chercherChemin(f.getPath(), nomlogiciel);
-////					if (loc != null)
-////						return loc;
-////				}
-////				if (f.getName().equalsIgnoreCase(nomlogiciel))
-////					return f.getPath();
-////			}
-////		}
-//		return null;
-//	}
-
-	@Value("${user.home}")
-	String userHomePath = "C:\\";
-
 	/**
 	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
 	 * répertoire et du nom de logiciel
@@ -194,32 +147,43 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 * @param nomlogiciel
 	 * @return
 	 */
-	private String chercherChemin(String repertoire, String nomlogiciel) {
+	private String chercherChemin(String repertoire, String nomLogiciel) {
 
-		System.setProperty("user.home", "C:\\");
+		// récupérer le disque (C ou D) du chemin
+		// faire une recherche sur
 
-		logger.info("************** USER.HOME : " + System.getProperty("user.home"));
+		String disc = "";
+		try {
+			disc = nomLogiciel.substring(0, 1);
+			nomLogiciel = nomLogiciel.substring(3);
 
-//	    Path newFilePath = Paths.get(repertoire);
-//	    Files.createFile(newFilePath);
-
-		File file = Paths.get(repertoire).toFile();
-		logger.info("************** FILE PATH : " + file.getAbsolutePath());
-
-		File[] files = file.listFiles();
-
-		if (files != null) {
-			for (File f : files) {
-				if (f.isDirectory() && f.getPath() != null) {
-					String loc = chercherChemin(f.getPath(), nomlogiciel);
-					if (loc != null)
-						return loc;
-				}
-				if (f.getName().equalsIgnoreCase(nomlogiciel))
-					return f.getPath();
+			Process process = Runtime.getRuntime().exec("cmd /" + disc + " if not exist " + nomLogiciel + " exit 7");
+			int sortie = process.exitValue();
+			if (sortie == 7) {
+				return null;
 			}
+		} catch (Exception ex) {
+			logger.info("hohohohohohohohohohohohohohohohohooho");
 		}
-		return null;
+		return (disc + ":\\" + nomLogiciel);
+
+//		File file = new File(repertoire);
+//		logger.info("************** FILE PATH : " + file.getAbsolutePath());
+//
+//		File[] files = file.listFiles();
+//
+//		if (files != null) {
+//			for (File f : files) {
+//				if (f.isDirectory() && f.getPath() != null) {
+//					String loc = chercherChemin(f.getPath(), nomlogiciel);
+//					if (loc != null)
+//						return loc;
+//				}
+//				if (f.getName().equalsIgnoreCase(nomlogiciel))
+//					return f.getPath();
+//			}
+//		}
+//		return null;
 	}
 
 	/**
