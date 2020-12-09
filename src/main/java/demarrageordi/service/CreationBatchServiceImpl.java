@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -125,7 +124,13 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			// String nomLogiciel =
 			// StringUtils.trimWhitespace(logiciel.getNom().toLowerCase());
 			String nomLogiciel = logiciel.getNom();
-			if (!nomLogiciel.endsWith(".exe")) {
+			if (nomLogiciel.startsWith("\"")) {
+				nomLogiciel = nomLogiciel.substring(1);
+			}
+			if (nomLogiciel.endsWith("\"")) {
+				nomLogiciel = nomLogiciel.substring(0, nomLogiciel.length() - 1);
+			}
+			if (!nomLogiciel.endsWith(".exe") && !nomLogiciel.endsWith(".EXE")) {
 				nomLogiciel = nomLogiciel + ".exe";
 			}
 			logger.info("************ nomLogiciel : " + nomLogiciel);
@@ -148,23 +153,39 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 * @param nomlogiciel
 	 * @return
 	 */
-	private String chercherChemin(String repertoire, String nomLogiciel) {
+	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		try {
-			String commande = "cmd /C if not exist \"" + nomLogiciel + "\" (exit 7) else (exit 0)";
-
-			Process process = Runtime.getRuntime().exec(commande);
-			process.waitFor(2, TimeUnit.SECONDS);
-			int sortie = process.exitValue();
-			process.destroy();
-			if (sortie == 7) {
-				nomLogiciel = null;
-			}
-		} catch (Exception ex) {
-			return null;
-		}
-		return (nomLogiciel);
+		// 'Fausse' méthode, en attendant de trouver comment chercher réellement le
+		// chemin on valide celui qui est donné (ensuite réactiver la 'vraie' méthode
+		// ci-dessous)
+		return nomlogiciel;
 	}
+
+// backup ==> méthode qui chercher réellement le chemin
+//	/**
+//	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
+//	 * répertoire et du nom de logiciel
+//	 * 
+//	 * @param repertoire
+//	 * @param nomlogiciel
+//	 * @return
+//	 */
+//	private String chercherChemin(String repertoire, String nomlogiciel) {
+//
+//		File[] files = new File(repertoire).listFiles();
+//		if (files != null) {
+//			for (File f : files) {
+//				if (f.isDirectory() && f.getPath() != null) {
+//					String loc = chercherChemin(f.getPath(), nomlogiciel);
+//					if (loc != null)
+//						return loc;
+//				}
+//				if (f.getName().equalsIgnoreCase(nomlogiciel))
+//					return f.getPath();
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * 
