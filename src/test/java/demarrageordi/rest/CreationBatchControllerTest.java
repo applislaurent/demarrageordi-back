@@ -4,22 +4,27 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.SystemProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,10 +51,25 @@ public class CreationBatchControllerTest {
 	private String baseUrl;
 
 	@Before
-	public void initialize() {
+	public void init() {
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 		baseUrl = "/demarrageordi";
+	}
+
+	@After
+	public void supprimerLesBatchsApresTest() {
+		String root = SystemProperties.get("user.dir");
+		File baseAppli = new File(root);
+		try {
+			for (File file : baseAppli.listFiles()) {
+				if (file.getPath().contains("Demarrage_sites_et_logiciels_")) {
+					FileUtils.forceDelete(file);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
@@ -80,7 +100,8 @@ public class CreationBatchControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(LogicielsEtSitesDtoString);
 
 		try {
-			this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
+			ResultActions resultatRequete = this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
+			MockHttpServletResponse reponse = resultatRequete.andReturn().getResponse();
 		} catch (Exception e) {
 			Assert.fail("La création du batch aurait du réussir");
 		}
@@ -150,79 +171,83 @@ public class CreationBatchControllerTest {
 
 	}
 
-	@Test
-	public void creationFichierBatchRepertoireLogicielInvalideKO() {
+// Test utile seulement dans la version complète de l'application,
+// dans laquelle on vérifie/cherche les chemins logiciels
+//	@Test
+//	public void creationFichierBatchRepertoireLogicielInvalideKO() {
+//
+//		// Création d'un logiciel
+//		List<LogicielDto> logicielsDto = new ArrayList<>();
+//		LogicielDto logicielDto = new LogicielDto();
+//		logicielDto.setNom("CCleaner");
+//		logicielDto.setRepertoire("C:\\");
+//		logicielsDto.add(logicielDto);
+//
+//		// Création d'un site web
+//		List<SitewebDto> siteswebDto = new ArrayList<>();
+//		SitewebDto sitewebDto = new SitewebDto();
+//		sitewebDto.setUrl("https://www.google.fr");
+//		siteswebDto.add(sitewebDto);
+//
+//		// Création de l'ensemble logiciels et sitewebs
+//		LogicielsEtSitesDto LogicielsEtSitesDto = new LogicielsEtSitesDto(logicielsDto, siteswebDto);
+//
+//		// Conversion du dto au format json
+//		String LogicielsEtSitesDtoString = json(LogicielsEtSitesDto);
+//
+//		// Créer une requête post, depuis un navigateur firefox
+//		MockHttpServletRequestBuilder requestBuilder = post(baseUrl + "/creer.batch")
+//				.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox")
+//				.contentType(MediaType.APPLICATION_JSON).content(LogicielsEtSitesDtoString);
+//
+//		try {
+//			ResultActions messageErreur = this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
+//			assertTrue(messageErreur.andReturn().getResponse().getContentAsString().equals(
+//					"La gÃ©nÃ©ration du fichier a Ã©chouÃ© : Un logiciel n'a pu Ãªtre trouvÃ©, svp soyez un peu plus prÃ©cis dans le nom du rÃ©pertoire de CCleaner"));
+//		} catch (Exception e) {
+//			Assert.fail("La création du batch aurait du échouer");
+//		}
+//
+//	}
 
-		// Création d'un logiciel
-		List<LogicielDto> logicielsDto = new ArrayList<>();
-		LogicielDto logicielDto = new LogicielDto();
-		logicielDto.setNom("CCleaner");
-		logicielDto.setRepertoire("C:\\");
-		logicielsDto.add(logicielDto);
-
-		// Création d'un site web
-		List<SitewebDto> siteswebDto = new ArrayList<>();
-		SitewebDto sitewebDto = new SitewebDto();
-		sitewebDto.setUrl("https://www.google.fr");
-		siteswebDto.add(sitewebDto);
-
-		// Création de l'ensemble logiciels et sitewebs
-		LogicielsEtSitesDto LogicielsEtSitesDto = new LogicielsEtSitesDto(logicielsDto, siteswebDto);
-
-		// Conversion du dto au format json
-		String LogicielsEtSitesDtoString = json(LogicielsEtSitesDto);
-
-		// Créer une requête post, depuis un navigateur firefox
-		MockHttpServletRequestBuilder requestBuilder = post(baseUrl + "/creer.batch")
-				.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox")
-				.contentType(MediaType.APPLICATION_JSON).content(LogicielsEtSitesDtoString);
-
-		try {
-			ResultActions messageErreur = this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
-			assertTrue(messageErreur.andReturn().getResponse().getContentAsString().equals(
-					"La gÃ©nÃ©ration du fichier a Ã©chouÃ© : Un logiciel n'a pu Ãªtre trouvÃ©, svp soyez un peu plus prÃ©cis dans le nom du rÃ©pertoire de CCleaner"));
-		} catch (Exception e) {
-			Assert.fail("La création du batch aurait du échouer");
-		}
-
-	}
-
-	@Test
-	public void creationFichierBatchUrlSiteWebKO() {
-
-		// Création d'un logiciel
-		List<LogicielDto> logicielsDto = new ArrayList<>();
-		LogicielDto logicielDto = new LogicielDto();
-		logicielDto.setNom("CCleaner");
-		logicielDto.setRepertoire("C:\\Program Files");
-		logicielsDto.add(logicielDto);
-
-		// Création d'un site web
-		List<SitewebDto> siteswebDto = new ArrayList<>();
-		SitewebDto sitewebDto = new SitewebDto();
-		sitewebDto.setUrl("https://framateam.org/  /channels/town-square");
-		siteswebDto.add(sitewebDto);
-
-		// Création de l'ensemble logiciels et sitewebs
-		LogicielsEtSitesDto LogicielsEtSitesDto = new LogicielsEtSitesDto(logicielsDto, siteswebDto);
-
-		// Conversion du dto au format json
-		String LogicielsEtSitesDtoString = json(LogicielsEtSitesDto);
-
-		// Créer une requête post, depuis un navigateur firefox
-		MockHttpServletRequestBuilder requestBuilder = post(baseUrl + "/creer.batch")
-				.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox")
-				.contentType(MediaType.APPLICATION_JSON).content(LogicielsEtSitesDtoString);
-
-		try {
-			ResultActions messageErreur = this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
-			assertTrue(messageErreur.andReturn().getResponse().getContentAsString().equals(
-					"La gÃ©nÃ©ration du fichier a Ã©chouÃ© : L'adresse de ce site c'est n'est pas correcte: https://framateam.org/  /channels/town-square"));
-		} catch (Exception e) {
-			Assert.fail("La création du batch aurait du échouer");
-		}
-
-	}
+// Test utile seulement dans la version complète de l'application,
+// dans laquelle on vérifie les urls
+//	@Test
+//	public void creationFichierBatchUrlSiteWebKO() {
+//
+//		// Création d'un logiciel
+//		List<LogicielDto> logicielsDto = new ArrayList<>();
+//		LogicielDto logicielDto = new LogicielDto();
+//		logicielDto.setNom("CCleaner");
+//		logicielDto.setRepertoire("C:\\Program Files");
+//		logicielsDto.add(logicielDto);
+//
+//		// Création d'un site web
+//		List<SitewebDto> siteswebDto = new ArrayList<>();
+//		SitewebDto sitewebDto = new SitewebDto();
+//		sitewebDto.setUrl("https://framateam.org/  /channels/town-square");
+//		siteswebDto.add(sitewebDto);
+//
+//		// Création de l'ensemble logiciels et sitewebs
+//		LogicielsEtSitesDto LogicielsEtSitesDto = new LogicielsEtSitesDto(logicielsDto, siteswebDto);
+//
+//		// Conversion du dto au format json
+//		String LogicielsEtSitesDtoString = json(LogicielsEtSitesDto);
+//
+//		// Créer une requête post, depuis un navigateur firefox
+//		MockHttpServletRequestBuilder requestBuilder = post(baseUrl + "/creer.batch")
+//				.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox")
+//				.contentType(MediaType.APPLICATION_JSON).content(LogicielsEtSitesDtoString);
+//
+//		try {
+//			ResultActions messageErreur = this.mockMvc.perform(requestBuilder).andExpect(status().is(200));
+//			assertTrue(messageErreur.andReturn().getResponse().getContentAsString().equals(
+//					"La gÃ©nÃ©ration du fichier a Ã©chouÃ© : L'adresse de ce site c'est n'est pas correcte: https://framateam.org/  /channels/town-square"));
+//		} catch (Exception e) {
+//			Assert.fail("La création du batch aurait du échouer");
+//		}
+//
+//	}
 
 	@Test
 	public void creationFichierBatchAucunParametreKO() {

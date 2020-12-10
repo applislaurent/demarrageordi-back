@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -111,7 +112,6 @@ public class CreationBatchController {
 //
 //	}
 
-	// backup method
 	@PostMapping(path = "creer.batch")
 	public Object creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto, HttpServletRequest request)
 			throws Exception {
@@ -132,8 +132,17 @@ public class CreationBatchController {
 			Path path = Paths.get(batch.getAbsolutePath());
 			ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-			return ResponseEntity.ok().headers(header).contentLength(batch.length())
-					.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
+			// Préparer la réponse
+			ResponseEntity<ByteArrayResource> reponse = ResponseEntity.ok().headers(header)
+					.contentLength(batch.length()).contentType(MediaType.parseMediaType("application/octet-stream"))
+					.body(resource);
+
+			// Supprimer le fichier batch du serveur
+			FileUtils.forceDelete(batch);
+
+			// Envoyer la tréponse
+			return reponse;
+
 		} catch (Exception e) {
 			String messageErreur = e.getLocalizedMessage();
 			return ResponseEntity.status(200).headers(new HttpHeaders())
