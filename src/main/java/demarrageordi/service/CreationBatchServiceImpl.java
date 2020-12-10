@@ -75,7 +75,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			throw new Exception(MessageExceptionConstantes.AUCUNE_INFO_SAISIE);
 		}
 		// Décommenter les lignes ci-dessous dans la version
-		// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
+		// complète de l'appli (dans laquelle on cherchera les chemins de fichiers)
 		// validSiteswebUrl(sitesWeb);
 		// validLogicielsDirectories(logiciels);
 
@@ -143,7 +143,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 				nomLogiciel = nomLogiciel + ".exe";
 			}
 
-			// Commenter la ligne ci-dessous et décommenter les suivantes, dans la version
+			// Supprimer la ligne ci-dessous et décommenter les suivantes, dans la version
 			// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
 			String cheminLogiciel = nomLogiciel;
 //			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
