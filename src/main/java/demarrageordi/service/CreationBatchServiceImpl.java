@@ -74,8 +74,10 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		if (logiciels.isEmpty() && sitesWeb.isEmpty()) {
 			throw new Exception(MessageExceptionConstantes.AUCUNE_INFO_SAISIE);
 		}
-		validSiteswebUrl(sitesWeb);
-		validLogicielsDirectories(logiciels);
+		// Décommenter les lignes ci-dessous dans la version
+		// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
+		// validSiteswebUrl(sitesWeb);
+		// validLogicielsDirectories(logiciels);
 
 	}
 
@@ -92,6 +94,13 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 	}
 
+	/**
+	 * Valide les noms de répertoires des logiciels (pour s'assurer d'avoir un nom
+	 * de répertoire assez précis, par exemple pas "C:")
+	 * 
+	 * @param logiciels
+	 * @throws Exception
+	 */
 	private void validLogicielsDirectories(List<Logiciel> logiciels) throws Exception {
 
 		// fichierBatchalider les répertoires des logiciels
@@ -133,12 +142,14 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			if (!nomLogiciel.endsWith(".exe") && !nomLogiciel.endsWith(".EXE")) {
 				nomLogiciel = nomLogiciel + ".exe";
 			}
-			logger.info("************ nomLogiciel : " + nomLogiciel);
-			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
-			logger.info("************ cheminLogiciel : " + cheminLogiciel);
-			if (cheminLogiciel == null) {
-				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
-			}
+
+			// Commenter la ligne ci-dessous et décommenter les suivantes, dans la version
+			// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
+			String cheminLogiciel = nomLogiciel;
+//			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
+//			if (cheminLogiciel == null) {
+//				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
+//			}
 			cheminsLogiciels.add(cheminLogiciel);
 		}
 		return cheminsLogiciels;
@@ -155,37 +166,20 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 */
 	private String chercherChemin(String repertoire, String nomlogiciel) {
 
-		// 'Fausse' méthode, en attendant de trouver comment chercher réellement le
-		// chemin on valide celui qui est donné (ensuite réactiver la 'vraie' méthode
-		// ci-dessous)
-		return nomlogiciel;
+		File[] files = new File(repertoire).listFiles();
+		if (files != null) {
+			for (File f : files) {
+				if (f.isDirectory() && f.getPath() != null) {
+					String loc = chercherChemin(f.getPath(), nomlogiciel);
+					if (loc != null)
+						return loc;
+				}
+				if (f.getName().equalsIgnoreCase(nomlogiciel))
+					return f.getPath();
+			}
+		}
+		return null;
 	}
-
-// backup ==> méthode qui chercher réellement le chemin
-//	/**
-//	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
-//	 * répertoire et du nom de logiciel
-//	 * 
-//	 * @param repertoire
-//	 * @param nomlogiciel
-//	 * @return
-//	 */
-//	private String chercherChemin(String repertoire, String nomlogiciel) {
-//
-//		File[] files = new File(repertoire).listFiles();
-//		if (files != null) {
-//			for (File f : files) {
-//				if (f.isDirectory() && f.getPath() != null) {
-//					String loc = chercherChemin(f.getPath(), nomlogiciel);
-//					if (loc != null)
-//						return loc;
-//				}
-//				if (f.getName().equalsIgnoreCase(nomlogiciel))
-//					return f.getPath();
-//			}
-//		}
-//		return null;
-//	}
 
 	/**
 	 * 
