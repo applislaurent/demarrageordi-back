@@ -128,15 +128,17 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		List<String> cheminsLogiciels = new ArrayList<>();
 
 		for (Logiciel logiciel : logiciels) {
-			// Suppression des espaces et mise en minuscule du nom du logiciel + ajout
-			// éventuel de l'extension
+			// Décommenter la ligne ci-dessous et supprimer les suivantes, dans la version
+			// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
 			// String nomLogiciel =
 			// StringUtils.trimWhitespace(logiciel.getNom().toLowerCase());
+
+			// Suppression des guillemets + ajout éventuel de l'extension
 			String nomLogiciel = logiciel.getNom();
-			if (nomLogiciel.startsWith("\"")) {
+			if (nomLogiciel.startsWith("\"") || nomLogiciel.startsWith("'")) {
 				nomLogiciel = nomLogiciel.substring(1);
 			}
-			if (nomLogiciel.endsWith("\"")) {
+			if (nomLogiciel.endsWith("\"") || nomLogiciel.endsWith("'")) {
 				nomLogiciel = nomLogiciel.substring(0, nomLogiciel.length() - 1);
 			}
 			if (!nomLogiciel.endsWith(".exe") && !nomLogiciel.endsWith(".EXE")) {
