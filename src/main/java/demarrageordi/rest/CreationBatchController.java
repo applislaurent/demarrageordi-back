@@ -140,7 +140,7 @@ public class CreationBatchController {
 			// Supprimer le fichier batch du serveur
 			FileUtils.forceDelete(batch);
 
-			// Envoyer la tréponse
+			// Envoyer la réponse
 			return reponse;
 
 		} catch (Exception e) {

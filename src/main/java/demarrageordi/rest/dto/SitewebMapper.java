@@ -12,7 +12,9 @@ public class SitewebMapper {
 		List<Siteweb> sitewebs = new ArrayList<Siteweb>();
 		if (sitewebDtos != null && !sitewebDtos.isEmpty()) {
 			for (SitewebDto s : sitewebDtos) {
-				sitewebs.add(toSiteweb(s));
+				if (s.getUrl() != null && !s.getUrl().isEmpty()) {
+					sitewebs.add(toSiteweb(s));
+				}
 			}
 		}
 
@@ -36,7 +38,9 @@ public class SitewebMapper {
 		List<SitewebDto> sitewebDtos = new ArrayList<SitewebDto>();
 		if (sitewebs != null && !sitewebs.isEmpty()) {
 			for (Siteweb s : sitewebs) {
-				sitewebDtos.add(toSitewebDto(s));
+				if (s.getUrl() != null && !s.getUrl().isEmpty()) {
+					sitewebDtos.add(toSitewebDto(s));
+				}
 			}
 		}
 		return sitewebDtos;

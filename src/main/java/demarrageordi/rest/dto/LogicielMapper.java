@@ -12,7 +12,10 @@ public class LogicielMapper {
 		List<Logiciel> logiciels = new ArrayList<Logiciel>();
 		if (logicielDtos != null && !logicielDtos.isEmpty()) {
 			for (LogicielDto l : logicielDtos) {
-				logiciels.add(toLogiciel(l));
+				if (l.getNom() != null && l.getRepertoire() != null && !l.getNom().isEmpty()
+						&& !l.getRepertoire().isEmpty()) {
+					logiciels.add(toLogiciel(l));
+				}
 			}
 		}
 
@@ -37,7 +40,10 @@ public class LogicielMapper {
 		List<LogicielDto> logicielDtos = new ArrayList<LogicielDto>();
 		if (logiciels != null && !logiciels.isEmpty()) {
 			for (Logiciel l : logiciels) {
-				logicielDtos.add(toLogicielDto(l));
+				if (l.getNom() != null && l.getRepertoire() != null && !l.getNom().isEmpty()
+						&& !l.getRepertoire().isEmpty()) {
+					logicielDtos.add(toLogicielDto(l));
+				}
 			}
 		}
 
