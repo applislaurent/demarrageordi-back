@@ -39,7 +39,7 @@ import demarrageordi.service.CreationBatchService;
 // Accès front en localhost
 // @CrossOrigin(origins = "http://localhost:4200")
 //Accès front depuis github
-@CrossOrigin(origins = "http://applislaurent.github.io/demarrageordi")
+@CrossOrigin(origins = "https://applislaurent.github.io/demarrageordi")
 
 public class CreationBatchController {
 
