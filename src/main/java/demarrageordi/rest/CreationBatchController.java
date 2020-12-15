@@ -34,7 +34,13 @@ import demarrageordi.service.CreationBatchService;
 
 @Controller
 @RequestMapping("/demarrageordi/")
-@CrossOrigin(origins = "*")
+// Tous accès autorisés à l'API
+// @CrossOrigin(origins = "*")
+// Accès front en localhost
+// @CrossOrigin(origins = "http://localhost:4200")
+//Accès front depuis github
+@CrossOrigin(origins = "https://applislaurent.github.io/demarrageordi")
+
 public class CreationBatchController {
 
 	@Autowired
@@ -113,8 +119,8 @@ public class CreationBatchController {
 //	}
 
 	@PostMapping(path = "creer.batch")
-	public Object creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto, HttpServletRequest request)
-			throws Exception {
+	public ResponseEntity creationBatch(@RequestBody LogicielsEtSitesDto logicielsEtSitesDto,
+			HttpServletRequest request) throws Exception {
 
 		List<Logiciel> logiciels = LogicielMapper.toLogiciels(logicielsEtSitesDto.getLogicielDtos());
 		List<Siteweb> sitesWeb = SitewebMapper.toSitewebs(logicielsEtSitesDto.getSitewebDtos());
