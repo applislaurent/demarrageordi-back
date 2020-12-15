@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,15 +54,15 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 		} catch (Exception e) {
 			logger.info("************* LOG INFO ************* :" + e.getMessage());
-			throw new Exception(creerMessageException(e), e);
+			throw new Exception(createExceptionMessage(e), e);
 		}
 		return fichierBatch;
 
 	}
 
 	/**
-	 * Valide les URL de sites web et les noms de répertoire renseignés pour l'accès
-	 * aux logiciels
+	 * Vérifie que l'utilisateur a saisi des informations (soit logiciels, soit
+	 * sites web)
 	 * 
 	 * @param logiciels
 	 * @param sitesWeb
@@ -74,50 +73,11 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		if (logiciels.isEmpty() && sitesWeb.isEmpty()) {
 			throw new Exception(MessageExceptionConstantes.AUCUNE_INFO_SAISIE);
 		}
-		// Décommenter les lignes ci-dessous dans la version
-		// complète de l'appli (dans laquelle on cherchera les chemins de fichiers)
-		// validSiteswebUrl(sitesWeb);
-		// validLogicielsDirectories(logiciels);
-
-	}
-
-	private void validSiteswebUrl(List<Siteweb> sitesWeb) throws Exception {
-
-		// Valider les url de sites web
-		for (Siteweb site : sitesWeb) {
-			try {
-				new URL(site.getUrl()).toURI();
-			} catch (Exception e) {
-				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_SITE + site.getUrl());
-			}
-		}
 
 	}
 
 	/**
-	 * Valide les noms de répertoires des logiciels (pour s'assurer d'avoir un nom
-	 * de répertoire assez précis, par exemple pas "C:")
-	 * 
-	 * @param logiciels
-	 * @throws Exception
-	 */
-	private void validLogicielsDirectories(List<Logiciel> logiciels) throws Exception {
-
-		// fichierBatchalider les répertoires des logiciels
-		// (pour avoir assez de précision pour rechercher le fichier, on oblige
-		// l'utilisateur à donner au moins 5 caractère pour le répertoire. On évite
-		// ainsi les chemins du genre "C:")
-		for (Logiciel logiciel : logiciels) {
-			if (logiciel.getRepertoire().length() < 5) {
-				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_REPERTOIRE_LOGICIEL + logiciel.getNom());
-			}
-		}
-
-	}
-
-	/**
-	 * Chercher les chemins exactes de logiciels, dans l'ordinateur de
-	 * l'utilisateur, à partir des nom et répertoires renseignés
+	 * Suppression d'éventuels guillemets et ajout si besoin d'extension .exe
 	 *
 	 * @param logiciels
 	 * @return
@@ -128,12 +88,6 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 		List<String> cheminsLogiciels = new ArrayList<>();
 
 		for (Logiciel logiciel : logiciels) {
-			// Décommenter la ligne ci-dessous et supprimer les suivantes, dans la version
-			// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
-			// String nomLogiciel =
-			// StringUtils.trimWhitespace(logiciel.getNom().toLowerCase());
-
-			// Suppression des guillemets + ajout éventuel de l'extension
 			String nomLogiciel = logiciel.getNom();
 			if (nomLogiciel.startsWith("\"") || nomLogiciel.startsWith("'")) {
 				nomLogiciel = nomLogiciel.substring(1);
@@ -144,43 +98,10 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			if (!nomLogiciel.endsWith(".exe") && !nomLogiciel.endsWith(".EXE")) {
 				nomLogiciel = nomLogiciel + ".exe";
 			}
-
-			// Supprimer la ligne ci-dessous et décommenter les suivantes, dans la version
-			// complète de l'appli (dans laquelle on cherche les chemins de fichiers)
-			String cheminLogiciel = nomLogiciel;
-//			String cheminLogiciel = chercherChemin(logiciel.getRepertoire(), nomLogiciel);
-//			if (cheminLogiciel == null) {
-//				throw new Exception(MessageExceptionConstantes.ERREUR_SAISIE_LOGICIEL + logiciel.getNom());
-//			}
-			cheminsLogiciels.add(cheminLogiciel);
+			cheminsLogiciels.add(nomLogiciel);
 		}
 		return cheminsLogiciels;
 
-	}
-
-	/**
-	 * Méthode récursive, cherche le chemin exact d'accès au logiciel, à partir du
-	 * répertoire et du nom de logiciel
-	 * 
-	 * @param repertoire
-	 * @param nomlogiciel
-	 * @return
-	 */
-	private String chercherChemin(String repertoire, String nomlogiciel) {
-
-		File[] files = new File(repertoire).listFiles();
-		if (files != null) {
-			for (File f : files) {
-				if (f.isDirectory() && f.getPath() != null) {
-					String loc = chercherChemin(f.getPath(), nomlogiciel);
-					if (loc != null)
-						return loc;
-				}
-				if (f.getName().equalsIgnoreCase(nomlogiciel))
-					return f.getPath();
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -201,9 +122,9 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 			writer = new PrintWriter(new FileWriter(fichierBatch));
 			writer.println("REM LANCEMENT AUTOMATIQUE SITES WEB");
 			writer.println("@echo off");
-			writer = ajouterLogiciels(writer, repertoiresLogiciels);
+			writer = addApps(writer, repertoiresLogiciels);
 			if (!sitesWeb.isEmpty()) {
-				writer = ajouterSitewebs(writer, sitesWeb, request);
+				writer = addWebsites(writer, sitesWeb, request);
 			}
 			writer.println("exit");
 			writer.close();
@@ -225,7 +146,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 * @return writer
 	 * @throws Exception
 	 */
-	private PrintWriter ajouterSitewebs(PrintWriter writer, List<Siteweb> sitewebs, HttpServletRequest request)
+	private PrintWriter addWebsites(PrintWriter writer, List<Siteweb> sitewebs, HttpServletRequest request)
 			throws Exception {
 
 		// Identifier le navigateur utilisé
@@ -265,7 +186,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 		String nomNavigateur = "";
 
-		// ===============Browser===========================
+		// Navigateur
 		if (navigateur.contains("msie")) {
 			String substring = detailsNavigateur.substring(detailsNavigateur.indexOf("MSIE")).split(";")[0];
 			nomNavigateur = substring.split(" ")[0].replace("MSIE", "IE") + "-" + substring.split(" ")[1];
@@ -334,7 +255,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 	 * 
 	 * @return writer
 	 */
-	private PrintWriter ajouterLogiciels(PrintWriter writer, List<String> repertoiresLogiciels) {
+	private PrintWriter addApps(PrintWriter writer, List<String> repertoiresLogiciels) {
 
 		for (String repertoire : repertoiresLogiciels) {
 			writer.println("start \"\" \"" + repertoire + "\"");
@@ -346,7 +267,7 @@ public class CreationBatchServiceImpl implements CreationBatchService {
 
 	}
 
-	private String creerMessageException(Exception e) {
+	private String createExceptionMessage(Exception e) {
 
 		String messageErreur = MessageExceptionConstantes.ECHEC;
 		messageErreur = messageErreur + e.getMessage();
