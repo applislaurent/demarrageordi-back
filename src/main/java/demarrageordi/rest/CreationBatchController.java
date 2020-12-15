@@ -35,11 +35,11 @@ import demarrageordi.service.CreationBatchService;
 @Controller
 @RequestMapping("/demarrageordi/")
 // Tous accès autorisés à l'API
-// @CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 // Accès front en localhost
-// @CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 //Accès front depuis github
-@CrossOrigin(origins = "https://applislaurent.github.io/demarrageordi", maxAge = 3600)
+@CrossOrigin(origins = "https://applislaurent.github.io")
 public class CreationBatchController {
 
 	@Autowired
